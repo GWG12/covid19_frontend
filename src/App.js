@@ -1,23 +1,23 @@
-import logo from './logo.svg';
+//import OperationNavBar from './Operations/NavBar/NavBar';
+//import MainScreen from './MainScreen';
+import { createContext } from "react"
+import Login from './components/Login';
+import { Route, Switch } from 'react-router-dom';
 import './App.css';
 
+
+export const baseUrlContext = createContext()
+
 function App() {
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <baseUrlContext.Provider value={'http://localhost:5000'}>
+        <Switch>
+          <Route path="/login" exact component={Login} />
+        </Switch>
+      </baseUrlContext.Provider>
     </div>
   );
 }
