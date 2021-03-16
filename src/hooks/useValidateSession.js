@@ -1,19 +1,34 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-
-export default function useFindUser() {
+/*
+export default function useValidateSession() {
     const [user, setUser] = useState(null);
     const [isLoading, setLoading] = useState(true);
-    useEffect(() => {
-        async function findUser() {
-            await axios.get('/user')
-                .then(res => {
-                    setUser(res.data.currentUser);
-                    setLoading(false);
-                }).catch(err => {
-                    setLoading(false);
+    useEffect((endpoint) => {
+        async function validateSession() {
+            try {
+                const res = await axios({
+                    method: 'GET',
+                    url: apiBaseUrl + endpoint,
+                    headers: {
+                        "Authorization": "Bearer " + parseToken()
+                    },
+                    timeout: 5000,
                 });
+                console.log('res data ', res.data)
+                localStorage.setItem('token', res.data.access_token);
+                setUser(res.data.currentUser);
+
+                setData(resp.data);
+                const defaultProps = {
+                    options: resp.data,
+                }
+                setDefaultProps(defaultProps);
+            } catch (err) {
+                console.log('En el error de middleware jwt')
+                setLoading(false);
+            }
         }
         findUser();
     }, []);
@@ -22,3 +37,4 @@ export default function useFindUser() {
         isLoading
     }
 }
+*/

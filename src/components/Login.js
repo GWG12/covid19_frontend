@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 //import LoginInputField from './LoginInputField';
 //import {useFormik} from 'formik';
 //import * as Yup from 'yup'; 
 //import { HiOutlineClipboardList,HiOutlinePuzzle } from "react-icons/hi";
-import axios from 'axios';
+import axios from '../helpers/axiosInstance.js';
+import { UserContext } from '../context/UserContext';
+
 //import { checkPropTypes } from 'prop-types';
 
 /*
@@ -20,37 +22,29 @@ import axios from 'axios';
 */
 //<div class="text-white hover:bg-gray-500 p-3"><GrDocumentText class="inline-block mr-2 troke-current text-white-600 h-6 w-6"/>Piezas</div>
 const Login = (props) => {
+    console.log('el user context ', UserContext)
     const [loginScreenState, setLoginScreenState] = useState(true);
+    const [formState, setFormState] = useState({});
+    const { user, setUser } = useContext(UserContext);
+    console.log('el user context ', user)
     console.log('el estado ', loginScreenState)
 
-    const loginPostRequest = async (username, password) => {
+    const submitHandler = async (e) => {
+        e.preventDefault();
+        console.log('LA FORMA ', formState)
+        const url = loginScreenState ? '/auth/login' : '/auth/signup'
         try {
-            const resp = await axios({
-                method: 'post',
-                url: 'http://127.0.0.1:8000/login',
-                data: {
-                    nombre: username,
-                    contrasena: password
-                }
-            });
-            console.log(resp)
-            localStorage.setItem('token', resp.data.access_token)
-            props.history.push('/operations/piezas');
-
+            const res = await axios.post(url, formState);
+            localStorage.setItem('token', res.data.accessToken);
+            localStorage.setItem('userId', res.data.userId);
+            console.log('la respuesta de ', res)
+            setUser(res.data.userId);
+            console.log('las props de login ', props, props.history)
+            props.history.push('/home');
         } catch (err) {
-            console.log(err)
+            console.log('el rrror', err)
         }
-    }
-
-    /*
-    const [data,setData] = useState({});
-    console.log('mi data ',data)
-    const loginHandler = (name,value) => {
-      setData(prev => ({
-        ...prev,[name]:value
-      }));
     };
-    */
 
     return (
         <div class="body-bg min-h-screen pt-12 md:pt-20 pb-6 px-2 md:px-0" >
@@ -62,18 +56,33 @@ const Login = (props) => {
                 </section>
 
                 <section class="mt-10">
-                    <form class="flex flex-col" method="POST" action="#">
+                    <form class="flex flex-col" onSubmit={submitHandler}>
                         <div class="mb-6 pt-3 rounded bg-gray-200">
                             <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" >Email</label>
-                            <input type="text" id="email" class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3" />
+                            <input
+                                type="text"
+                                id="email"
+                                class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3"
+                                onChange={(e) => setFormState({ ...formState, email: e.target.value })}
+                            />
                         </div>
                         <div class="mb-6 pt-3 rounded bg-gray-200">
                             <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" >Password</label>
-                            <input type="password" id="password" class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3" />
+                            <input
+                                type="password"
+                                id="password"
+                                class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3"
+                                onChange={(e) => setFormState({ ...formState, password: e.target.value })}
+                            />
                         </div>
                         {!loginScreenState ? <div class="mb-6 pt-3 rounded bg-gray-200">
                             <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" >Confirm password</label>
-                            <input type="password" id="repeat-password" class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3" />
+                            <input
+                                type="password"
+                                id="repeat-password"
+                                class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3"
+                                onChange={(e) => setFormState({ ...formState, repeat_password: e.target.value })}
+                            />
                         </div> : null}
                         <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200" type="submit">Sign In</button>
                     </form>

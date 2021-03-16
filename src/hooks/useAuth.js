@@ -2,9 +2,9 @@ import { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { parseToken } from '../helpers/parsers';
 import axios from 'axios';
-import { UserContext } from './UserContext';
+import { UserContext } from '../context/UserContext';
 
-
+/*
 export default function useAuth() {
     let history = useHistory();
     const { setUser } = useContext(UserContext);
@@ -22,6 +22,7 @@ export default function useAuth() {
                 timeout: 5000,
             });
             console.log('res data ', res.data)
+            localStorage.setItem('token', res.data.access_token);
             setUser(res.data.currentUser);
 
             setData(resp.data);
@@ -46,15 +47,15 @@ export default function useAuth() {
     //register user
     const registerUser = async (payload) => {
         try {
-            const resp = await axios({
+            const res = await axios({
                 method: 'POST',
                 url: apiBaseUrl + 'auth/signup',
                 timeout: 5000,
                 data: payload,
             });
-            console.log('resp data ', resp)
-            setFormState(payload);
-            return resp;
+            setUser(res.data.id);
+            localStorage.setItem('token', res.data.access_token);
+            await setUserContext;
         } catch (err) {
             console.log(err)
             setError(error);
@@ -75,3 +76,4 @@ export default function useAuth() {
         error
     }
 }
+*/

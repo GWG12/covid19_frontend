@@ -1,8 +1,11 @@
 //import OperationNavBar from './Operations/NavBar/NavBar';
 //import MainScreen from './MainScreen';
-import { createContext } from "react"
+import { createContext, useState } from "react"
 import Login from './components/Login';
+import Home from './components/Home';
+import PrivateRoute from './components/security/PrivateRoute';
 import { Route, Switch } from 'react-router-dom';
+import { UserProvider } from './context/UserContext';
 import './App.css';
 
 
@@ -13,10 +16,13 @@ function App() {
 
   return (
     <div className="App">
-      <baseUrlContext.Provider value={'http://localhost:5000'}>
-        <Switch>
-          <Route path="/login" exact component={Login} />
-        </Switch>
+      <baseUrlContext.Provider value={'http://localhost:8000'}>
+        <UserProvider>
+          <Switch>
+            <PrivateRoute path="/home" endpoint="/statistics" exact component={Home} />
+            <Route path="/login" exact component={Login} />
+          </Switch>
+        </UserProvider>
       </baseUrlContext.Provider>
     </div>
   );
