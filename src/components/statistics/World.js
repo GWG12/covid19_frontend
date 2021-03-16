@@ -6,9 +6,10 @@
 //import axios from '../helpers/axiosInstance.js';
 //import { UserContext } from './UserContext';
 //import { checkPropTypes } from 'prop-types';
-import { UserContext } from '../context/UserContext';
+import { UserContext } from '../../context/UserContext';
 import React, { useContext, useState, useEffect } from 'react';
-import axios from '../helpers/axiosInstance.js';
+import axios from '../../helpers/axiosInstance.js';
+
 
 /*
     <div class="grid grid-cols-6">
@@ -23,7 +24,7 @@ import axios from '../helpers/axiosInstance.js';
     </div>
 */
 //<div class="text-white hover:bg-gray-500 p-3"><GrDocumentText class="inline-block mr-2 troke-current text-white-600 h-6 w-6"/>Piezas</div>
-const Home = (props) => {
+const World = (props) => {
     const [data, setData] = useState([]);
     async function fetchStatistics() {
         try {
@@ -43,9 +44,10 @@ const Home = (props) => {
         <div class="body-bg min-h-screen pt-12 md:pt-20 pb-6 px-2 md:px-0" >
 
             <h1>HIla</h1>
-            <button>Dale click papaw</button>
+            {data && }
+            <button>Sample button</button>
         </div>
     )
 }
 
-export default Home;
+export default World;

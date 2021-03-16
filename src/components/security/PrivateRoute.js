@@ -27,9 +27,6 @@ const PrivateRoute = ({ component, ...rest }) => {
     } catch (err) {
         decodedToken = null;
     }
-    console.log('evaluando ', ((!decodedToken || !user) || (decodedToken.id !== user)) ? 'pepe' : 'manuel')
-    //((!decodedToken.id || !userId[0]) && (decodedToken.id === userId[0])) ? <Redirect to='/login' />
-    //: children
     return (
         <Route {...rest} render={() => {
             return ((!decodedToken || !user) || (decodedToken.id !== user) ? <Redirect to='/login' />

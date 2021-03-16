@@ -3,8 +3,8 @@ import React, { useState, useContext } from 'react';
 //import {useFormik} from 'formik';
 //import * as Yup from 'yup'; 
 //import { HiOutlineClipboardList,HiOutlinePuzzle } from "react-icons/hi";
-import axios from '../helpers/axiosInstance.js';
-import { UserContext } from '../context/UserContext';
+import axios from '../../helpers/axiosInstance.js';
+import { UserContext } from '../../context/UserContext';
 
 //import { checkPropTypes } from 'prop-types';
 
@@ -27,6 +27,7 @@ const Login = (props) => {
     const [formState, setFormState] = useState({});
     const { user, setUser } = useContext(UserContext);
     console.log('el user context ', user)
+    console.log('props en el login ', props)
     console.log('el estado ', loginScreenState)
 
     const submitHandler = async (e) => {
@@ -40,7 +41,7 @@ const Login = (props) => {
             console.log('la respuesta de ', res)
             setUser(res.data.userId);
             console.log('las props de login ', props, props.history)
-            props.history.push('/home');
+            props.history.push('/');
         } catch (err) {
             console.log('el rrror', err)
         }
