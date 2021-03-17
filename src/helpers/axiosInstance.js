@@ -18,39 +18,48 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.response.use(
     response => response,
-    error => {
+    async error => {
         const originalRequest = error.config;
+        console.log('error en axios ', error.response.status)
 
         // Prevent infinite loops
-        if (error.response.status === 401 && originalRequest.url === error.config.baseURL + 'token/refresh') {
+        if (error.response.status === 403 && originalRequest.url === error.config.baseURL + 'token/refresh') {
             window.location.href = '/login';
             return Promise.reject(error);
         }
 
-        if (error.response.status !== 401 && originalRequest.url === error.config.baseURL + 'token/refresh' && error.response.status !== 403) {
+        if (error.response.status === 401 || error.response.status === 404) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('userId');
             window.location.href = '/error';
             return Promise.reject(error);
         }
-
+        console.log('user id en interceptor ', localStorage.getItem('userId'))
+        console.log('el token ', localStorage.getItem('token'))
+        return;
         if (error.response.status === 403) {
-            return axiosInstance
-                .post('/token/refresh/', { userId: userId })
-                .then((response) => {
-
-                    localStorage.setItem('access_token', response.data.accessToken);
-                    //localStorage.setItem('refresh_token', response.data.refresh);
-
-                    axiosInstance.defaults.headers['Authorization'] = "Bearer " + response.data.accessToken;
-                    originalRequest.headers['Authorization'] = "Bearer " + response.data.accessToken;
-
-                    return axiosInstance(originalRequest);
-                })
-                .catch(err => {
-                    window.location.href = '/login';
+            console.log('OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO')
+            try {
+                const res = await axios({
+                    method: 'post',
+                    url: 'http://localhost:8000/token/refresh',
+                    headers: {
+                        "Authorization": "Bearer " + localStorage.getItem('token')
+                    },
+                    timeout: 5000,
                 });
+                console.log('res   ', res)
+                //const res = await axiosInstance.post('/token/refresh', { userId: localStorage.getItem('userId') })
+                localStorage.setItem('token', res.data.accessToken);
+                axiosInstance.defaults.headers['Authorization'] = "Bearer " + localStorage.getItem('token');
+                originalRequest.headers['Authorization'] = "Bearer " + localStorage.getItem('token');
+                return axiosInstance(originalRequest);
+            } catch (err) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('userId');
+                window.location.href = '/login';
+            }
         }
-
-
         // specific error handling done elsewhere
         return Promise.reject(error);
     }

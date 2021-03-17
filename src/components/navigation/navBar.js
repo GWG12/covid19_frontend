@@ -12,24 +12,12 @@ import React, { useContext, useState, useEffect } from 'react';
 import axios from '../../helpers/axiosInstance.js';
 import { RiVirusLine } from "react-icons/ri";
 
-/*
-    <div class="grid grid-cols-6">
-        <div class="fixed bg-gray-800 bg-opacity-75 col-span-1 flex-col shadow-2xl h-screen z-10">
-            <div class="text-white hover:bg-gray-500">1</div>
-            <div class="text-white">2</div>
-            <div class="text-white">3</div>
-        </div>
-        <div class="col-span-5 z-0">
-            <h1 class="text-lg">HOLA MANO 4</h1>
-        </div>
-    </div>
-*/
-//<div class="text-white hover:bg-gray-500 p-3"><GrDocumentText class="inline-block mr-2 troke-current text-white-600 h-6 w-6"/>Piezas</div>
+
 const NavBar = (props) => {
 
     const [activeSession, setActiveSession] = useState(false);
 
-    const logOutHandler = (e) => {
+    const logOutHandler = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('userId');
         props.history.push('/login');
@@ -38,7 +26,7 @@ const NavBar = (props) => {
     if (activeSession) {
         logOutHandler()
     }
-    console.log('props de NAV ', props)
+
 
     return (
         <div class="w-full h-full grid grid-cols-12 ">
@@ -51,10 +39,10 @@ const NavBar = (props) => {
                 </div>
             </div>
             <div
-                class="col-span-3 md:col-span-2 pl-2 pr-2 bg-gradient-to-r from-blue-500 to-blue-300 pt-3 pb-3 grid place-items-center cursor-pointer"
-                onClick={(e) => setActiveSession(true)}
+                class="col-span-3 md:col-span-2 pl-2 pr-2 bg-gradient-to-r from-blue-500 to-blue-300 md:pt-3 md:pb-3 grid place-items-center cursor-pointer"
+                onClick={() => setActiveSession(true)}
             >
-                <span class="xl:text-xl text-white font-bold">Logout </span>
+                <span class="md:text-xl text-white font-bold">Logout </span>
             </div>
         </div>
     )

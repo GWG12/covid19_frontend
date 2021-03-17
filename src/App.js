@@ -19,7 +19,7 @@ function App() {
       <baseUrlContext.Provider value={'http://localhost:8000'}>
         <UserProvider>
           <Switch>
-            <PrivateRoute path="/" endpoint="/statistics" exact component={Home} />
+            <PrivateRoute path="/" endpoint="/statistics/continents" exact component={Home} />
             <Route path="/login" exact component={Login} />
           </Switch>
         </UserProvider>
