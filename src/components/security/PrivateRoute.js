@@ -1,11 +1,9 @@
 import { Route, Redirect } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
-import React, { useState } from 'react';
+import React from 'react';
 
 
 const PrivateRoute = ({ component, ...rest }) => {
-
-    const [data, setData] = useState(null);
 
     const user = localStorage.getItem('userId');
 

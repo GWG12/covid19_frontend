@@ -20,7 +20,7 @@ const Home = (props) => {
             const res = await axios.get(props.endpoint);
             setData(res.data);
         } catch (err) {
-            console.log(err)
+            return;
         }
     }
 
@@ -34,14 +34,12 @@ const Home = (props) => {
     }
 
     const getCountry = async (endpoint) => {
-        console.log('el endpoint ', endpoint)
         if (!endpoint) return;
         setOptions([])
         props.history.push(endpoint);
     }
 
     useEffect(() => {
-        console.log('first useEffect ')
         fetchStatistics();
         fetchCountriesList('/statistics/countries');
         setFilter(true);
@@ -50,9 +48,6 @@ const Home = (props) => {
 
     let getOptionLabel = filter ? (option) => { return option.country } : (option) => { return option };
 
-    console.log('options ', options)
-    console.log('getLabel ', getOptionLabel)
-    console.log()
     return (
         <div class="font-sans leading-normal tracking-normal flex flex-col">
             <div class="h-12 md:h-20">

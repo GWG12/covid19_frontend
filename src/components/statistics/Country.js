@@ -1,9 +1,7 @@
-import { CountryContext } from '../../context/CountryContext';
 import { withRouter } from 'react-router-dom';
-import React, { useContext } from 'react';
+import React from 'react';
 import axios from '../../helpers/axiosInstance.js';
 import NavBar from '../navigation/navBar';
-import { useScrollTrigger } from '@material-ui/core';
 import { useState, useEffect } from 'react';
 
 
@@ -16,13 +14,9 @@ const Country = (props) => {
     const [deaths, setDeaths] = useState({});
     const [tests, setTests] = useState({});
     const [updateFlag, setUpdateFlag] = useState(false);
-    const [display, setDisplay] = useState(false);
-    console.log('THE COUNTRY ', country)
-    console.log('THE COUNTRY props ', window.location.pathname)
+
 
     useEffect(() => {
-        console.log('country useEffect')
-        console.log('la update flag', updateFlag)
         async function fetchApi(endpoint) {
             try {
                 const res = await axios.get(endpoint);
@@ -37,8 +31,6 @@ const Country = (props) => {
 
     useEffect(() => {
         if (!updateFlag) return;
-        console.log('post  useEffect')
-        console.log(formState)
         async function fetchApi(endpoint) {
             try {
                 const res = await axios.post(endpoint, formState);
@@ -52,7 +44,6 @@ const Country = (props) => {
         setUpdateFlag(false)
     }, [formState])
 
-    console.log('la edit flag ', editFlag)
     return (
         <div class="font-sans leading-normal tracking-normal flex flex-col">
             <div class="h-12 md:h-20">

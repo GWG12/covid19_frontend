@@ -1,4 +1,3 @@
-import { createContext } from "react"
 import Login from './components/account/Login';
 import Home from './components/dashboard/Home';
 import Country from './components/statistics/Country';
@@ -8,11 +7,9 @@ import { CountryProvider } from './context/CountryContext';
 import './App.css';
 
 
-export const baseUrlContext = createContext()
 
 function App() {
 
-  console.log('En el home')
   return (
     <div className="App">
       <CountryProvider>

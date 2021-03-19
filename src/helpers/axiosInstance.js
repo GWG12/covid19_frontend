@@ -13,12 +13,7 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use((config) => {
-    console.log('los headers previo', config.headers)
     config.headers.Authorization = "Bearer " + localStorage.getItem('token');
-
-    console.log('el token intercept request ', localStorage.getItem('token'))
-    console.log('los headers after ', config.headers)
-    console.log('config request ', config)
     return config;
 }, (error) => {
     return Promise.reject(error);
@@ -34,8 +29,6 @@ axiosInstance.interceptors.response.use(
     async error => {
         const originalRequest = error.config;
 
-        console.log('instancia de axios')
-        console.log(localStorage.getItem('token'))
 
         // Prevent infinite loops
         if (error.response.status === 403 && originalRequest.url === error.config.baseURL + 'token/refresh') {
