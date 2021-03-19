@@ -8,17 +8,20 @@ const Login = (props) => {
     console.log()
     const [loginScreenState, setLoginScreenState] = useState(true);
     const [formState, setFormState] = useState({});
-    const { user, setUser } = useContext(UserContext);
 
     console.log('en el login')
     const submitHandler = async (e) => {
         e.preventDefault();
-        const url = loginScreenState ? '/auth/login' : '/auth/signup'
+        const url = loginScreenState ? '/auth/login' : '/auth/signup';
+        console.log('el usuario de signup ', url)
+        console.log(' la forma del sign ', formState)
         try {
             const res = await axios.post(url, formState);
+            console.log('la res del signup ', res)
             localStorage.setItem('token', res.data.accessToken);
             localStorage.setItem('userId', res.data.userId);
-            setUser(res.data.userId);
+            console.log('TOEKN signup ', localStorage.getItem('token'))
+            console.log('userID signup ', localStorage.getItem('userId'))
             props.history.push('/');
         } catch (err) {
             console.log(err)

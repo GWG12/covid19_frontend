@@ -4,13 +4,24 @@ import axios from 'axios';
 // Set main axios instance to replicate it all subsequent requests
 const axiosInstance = axios.create({
     baseURL: 'http://localhost:8000',
-    timeout: 5000,
+    timeout: 10000,
     headers: {
-        'Authorization': localStorage.getItem('token') ? "Bearer " + localStorage.getItem('token') : null,
         'Content-Type': 'application/json',
         'accept': 'application/json'
     },
     withCredentials: true
+});
+
+axiosInstance.interceptors.request.use((config) => {
+    console.log('los headers previo', config.headers)
+    config.headers.Authorization = "Bearer " + localStorage.getItem('token');
+
+    console.log('el token intercept request ', localStorage.getItem('token'))
+    console.log('los headers after ', config.headers)
+    console.log('config request ', config)
+    return config;
+}, (error) => {
+    return Promise.reject(error);
 });
 
 /* 
@@ -24,6 +35,7 @@ axiosInstance.interceptors.response.use(
         const originalRequest = error.config;
 
         console.log('instancia de axios')
+        console.log(localStorage.getItem('token'))
 
         // Prevent infinite loops
         if (error.response.status === 403 && originalRequest.url === error.config.baseURL + 'token/refresh') {
