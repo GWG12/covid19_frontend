@@ -1,15 +1,5 @@
-
-//import LoginInputField from './LoginInputField';
-//import {useFormik} from 'formik';
-//import * as Yup from 'yup'; 
-//import { HiOutlineClipboardList,HiOutlinePuzzle } from "react-icons/hi";
-//import axios from '../helpers/axiosInstance.js';
-//import { UserContext } from './UserContext';
-//import { checkPropTypes } from 'prop-types';
-//import { UserContext } from '../context/UserContext';
 import { withRouter } from 'react-router-dom';
-import React, { useContext, useState, useEffect } from 'react';
-import axios from '../../helpers/axiosInstance.js';
+import React, { useState } from 'react';
 import { RiVirusLine } from "react-icons/ri";
 
 

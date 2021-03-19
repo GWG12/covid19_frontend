@@ -1,9 +1,7 @@
 import axios from 'axios';
-//import { useContext } from 'react';
 
 
-const userId = '604db8f25c8a8370402479fb'
-
+// Set main axios instance to replicate it all subsequent requests
 const axiosInstance = axios.create({
     baseURL: 'http://localhost:8000',
     timeout: 5000,
@@ -15,12 +13,17 @@ const axiosInstance = axios.create({
     withCredentials: true
 });
 
-
+/* 
+Intercepts all requests to check if access token is still valid. If not, send refresh token to
+/token/refresh endpoint to create a new access token; the old refresh token is replaced by the 
+new refresh token in the database. In case the refresh token is not valid as well, log out user.  
+*/
 axiosInstance.interceptors.response.use(
     response => response,
     async error => {
         const originalRequest = error.config;
-        console.log('error en axios ', error.response.status)
+
+        console.log('instancia de axios')
 
         // Prevent infinite loops
         if (error.response.status === 403 && originalRequest.url === error.config.baseURL + 'token/refresh') {
@@ -30,15 +33,11 @@ axiosInstance.interceptors.response.use(
 
         if (error.response.status === 401 || error.response.status === 404) {
             localStorage.removeItem('token');
-            localStorage.removeItem('userId');
             window.location.href = '/error';
             return Promise.reject(error);
         }
-        console.log('user id en interceptor ', localStorage.getItem('userId'))
-        console.log('el token ', localStorage.getItem('token'))
-        return;
+
         if (error.response.status === 403) {
-            console.log('OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO')
             try {
                 const res = await axios({
                     method: 'post',
@@ -47,22 +46,23 @@ axiosInstance.interceptors.response.use(
                         "Authorization": "Bearer " + localStorage.getItem('token')
                     },
                     timeout: 5000,
+                    withCredentials: true,
+                    data: { userId: localStorage.getItem('userId') }
                 });
-                console.log('res   ', res)
-                //const res = await axiosInstance.post('/token/refresh', { userId: localStorage.getItem('userId') })
                 localStorage.setItem('token', res.data.accessToken);
                 axiosInstance.defaults.headers['Authorization'] = "Bearer " + localStorage.getItem('token');
                 originalRequest.headers['Authorization'] = "Bearer " + localStorage.getItem('token');
                 return axiosInstance(originalRequest);
             } catch (err) {
-                localStorage.removeItem('token');
                 localStorage.removeItem('userId');
-                window.location.href = '/login';
+                return window.location.href = '/login';
             }
         }
         // specific error handling done elsewhere
         return Promise.reject(error);
+
     }
+
 );
 
 

@@ -1,49 +1,27 @@
 import React, { useState, useContext } from 'react';
-//import LoginInputField from './LoginInputField';
-//import {useFormik} from 'formik';
-//import * as Yup from 'yup'; 
-//import { HiOutlineClipboardList,HiOutlinePuzzle } from "react-icons/hi";
 import axios from '../../helpers/axiosInstance.js';
 import { UserContext } from '../../context/UserContext';
 
-//import { checkPropTypes } from 'prop-types';
 
-/*
-    <div class="grid grid-cols-6">
-        <div class="fixed bg-gray-800 bg-opacity-75 col-span-1 flex-col shadow-2xl h-screen z-10">
-            <div class="text-white hover:bg-gray-500">1</div>
-            <div class="text-white">2</div>
-            <div class="text-white">3</div>
-        </div>
-        <div class="col-span-5 z-0">
-            <h1 class="text-lg">HOLA MANO 4</h1>
-        </div>
-    </div>
-*/
-//<div class="text-white hover:bg-gray-500 p-3"><GrDocumentText class="inline-block mr-2 troke-current text-white-600 h-6 w-6"/>Piezas</div>
 const Login = (props) => {
-    console.log('el user context ', UserContext)
+
+    console.log()
     const [loginScreenState, setLoginScreenState] = useState(true);
     const [formState, setFormState] = useState({});
     const { user, setUser } = useContext(UserContext);
-    console.log('el user context ', user)
-    console.log('props en el login ', props)
-    console.log('el estado ', loginScreenState)
 
+    console.log('en el login')
     const submitHandler = async (e) => {
         e.preventDefault();
-        console.log('LA FORMA ', formState)
         const url = loginScreenState ? '/auth/login' : '/auth/signup'
         try {
             const res = await axios.post(url, formState);
             localStorage.setItem('token', res.data.accessToken);
             localStorage.setItem('userId', res.data.userId);
-            console.log('la respuesta de ', res)
             setUser(res.data.userId);
-            console.log('las props de login ', props, props.history)
             props.history.push('/');
         } catch (err) {
-            console.log('el rrror', err)
+            console.log(err)
         }
     };
 
